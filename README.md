@@ -85,5 +85,5 @@ bez chýb. Výpisy a screenshoty sú v priečinku `docs/`.
 
 ## Použitie AI nástrojov
 
-Pri vypracovaní zadania bol použitý AI asistent **Claude** (Anthropic) – pomoc s návrhom
-štruktúry kódu, parsermi, štýlmi a textami. Kód som prešiel, otestoval a viem ho vysvetliť.
+Pri vypracovaní zadania bol použitý AI – pomoc s návrhom
+štruktúry kódu, parsermi, štýlmi a textami.
