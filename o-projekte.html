@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Informácie o projekte Obedové menu v okolí fakulty – zdroje dát, spracovanie a použité knižnice.">
+    <meta name="author" content="Viktor Andreychyk">
+    <title>O projekte | Obedové menu v okolí fakulty</title>
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#obsah">Preskočiť na obsah</a>
+
+<header class="site-header">
+    <nav class="navbar navbar-expand-md" aria-label="Hlavná navigácia">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/favicon.svg" alt="" width="36" height="36">
+                <span>Obedové menu <span class="brand-sub">v okolí FEI STU</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#hlavneMenu"
+                    aria-controls="hlavneMenu" aria-expanded="false" aria-label="Zobraziť navigáciu">
+                <span class="bi bi-list" aria-hidden="true"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="hlavneMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><span class="bi bi-egg-fried" aria-hidden="true"></span> Denné menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#nastavenia"><span class="bi bi-sliders" aria-hidden="true"></span> Nastavenia</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="o-projekte.html"><span class="bi bi-info-circle" aria-hidden="true"></span> O projekte</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <p class="hero-kicker"><span class="bi bi-journal-code" aria-hidden="true"></span> WEBTE1 &middot; Zadanie č.&nbsp;2</p>
+            <h1>O projekte</h1>
+            <p class="hero-lead">Odkiaľ sa berú dáta, ako sa spracúvajú a&nbsp;čo všetko je pod kapotou.</p>
+        </div>
+    </div>
+</header>
+
+<main id="obsah" class="page-content">
+    <div class="container">
+        <nav class="content-card" aria-labelledby="obsahNadpis">
+            <h2 id="obsahNadpis">Obsah stránky</h2>
+            <ul>
+                <li><a href="#zdroje">Zdroje dát</a></li>
+                <li><a href="#spracovanie">Spracovanie dát</a></li>
+                <li><a href="#struktura">Jednotná štruktúra dát</a></li>
+                <li><a href="#ukladanie">Ukladanie a&nbsp;aktualizácia</a></li>
+                <li><a href="#kniznice">Použité knižnice</a></li>
+                <li><a href="#alergeny">Zoznam alergénov</a></li>
+            </ul>
+        </nav>
+
+        <section class="content-card" id="zdroje" aria-labelledby="zdrojeNadpis">
+            <h2 id="zdrojeNadpis"><span class="bi bi-shop" aria-hidden="true"></span> Zdroje dát</h2>
+            <p>Menu sa načítava z&nbsp;troch prevádzok v&nbsp;Mlynskej doline, ktoré zverejňujú menu priamo v&nbsp;HTML. Každá stránka má inú štruktúru:</p>
+            <ul class="source-list">
+                <li>
+                    <strong>Eat &amp; Meet</strong> (ŠD Átriaky) –
+                    <a href="https://www.eatandmeet.sk/tyzdenne-menu">www.eatandmeet.sk/tyzdenne-menu</a><br>
+                    Bootstrap záložky <code>div#day-1</code> až <code>div#day-7</code>, každé jedlo je blok <code>.menu-body</code>
+                    s&nbsp;nadpisom <code>h4</code>, cenou <code>.price</code> (verejnosť / študent) a&nbsp;popisom <code>.desc</code> s&nbsp;alergénmi.
+                </li>
+                <li>
+                    <strong>Delikanti – Jedáleň PriF UK</strong> –
+                    <a href="https://www.delikanti.sk/prevadzky/3-jedalen-prif-uk/">www.delikanti.sk/prevadzky/3-jedalen-prif-uk/</a><br>
+                    Tabuľka <code>table.prif-denne-table</code>, deň a&nbsp;dátum sú v&nbsp;bunke <code>th</code> s&nbsp;<code>rowspan</code>,
+                    číslo menu v&nbsp;<code>strong</code>, názov s&nbsp;hmotnosťou a&nbsp;alergénmi v&nbsp;ďalšej bunke. Stránka neuvádza ceny.
+                </li>
+                <li>
+                    <strong>FiitFood</strong> (FIIT STU) –
+                    <a href="http://www.freefood.sk/menu/">www.freefood.sk/menu/</a> (sekcia <code>#fiit-food</code>)<br>
+                    Vnorené zoznamy <code>ul.daily-offer &gt; li</code> (deň s&nbsp;dátumom v&nbsp;<code>.day-title</code>) a&nbsp;<code>ul.day-offer &gt; li</code> (jedlo),
+                    typ jedla v&nbsp;<code>span.brand</code>, cena v&nbsp;<code>span.price</code>, alergény vo formáte <code>A:1,3,7</code>.
+                </li>
+            </ul>
+        </section>
+
+        <section class="content-card" id="spracovanie" aria-labelledby="spracovanieNadpis">
+            <h2 id="spracovanieNadpis"><span class="bi bi-gear" aria-hidden="true"></span> Spracovanie dát</h2>
+            <ol class="steps">
+                <li>Stránky sa načítavajú <strong>asynchrónne pomocou Fetch API</strong>. Kvôli politike CORS idú požiadavky na živé stránky cez
+                    proxy určené na cvičení (adresa sa nastavuje v&nbsp;<code>js/config.js</code>). Iné verejné CORS proxy sa nepoužívajú.</li>
+                <li>Prepínačom <em>Zdroj dát</em> sa dá prepnúť medzi živou stránkou a&nbsp;<strong>lokálnou kópiou</strong> v&nbsp;priečinku <code>local/</code> (na ladenie).</li>
+                <li>Prijatý HTML kód sa prevedie na DOM strom pomocou <code>DOMParser</code>. Každá reštaurácia má vlastnú funkciu
+                    <code>parse(doc)</code> v&nbsp;súbore <code>js/restaurants.js</code>, ktorá v&nbsp;strome vyhľadáva pomocou
+                    <code>querySelector</code> / <code>querySelectorAll</code>.</li>
+                <li>Regulárne výrazy sa používajú len na malé, už vybrané texty (napr. oddelenie alergénov či hmotnosti od názvu jedla) – nikdy nie na celý dokument.</li>
+                <li>Cudzí HTML kód sa nikdy nevkladá do stránky. Zobrazujú sa len vybrané údaje, ktoré sa vkladajú ako text (jQuery <code>.text()</code>).</li>
+                <li>Ak je stránka nedostupná, zmení sa jej štruktúra alebo chýba menu na daný deň, karta reštaurácie zobrazí zrozumiteľné hlásenie
+                    a&nbsp;ostatné reštaurácie sa zobrazia normálne (<code>Promise.allSettled</code>).</li>
+            </ol>
+            <p>Novú reštauráciu stačí pridať ako ďalší objekt do poľa <code>RESTAURANTS</code> s&nbsp;vlastnou funkciou <code>parse</code>.</p>
+        </section>
+
+        <section class="content-card" id="struktura" aria-labelledby="strukturaNadpis">
+            <h2 id="strukturaNadpis"><span class="bi bi-braces" aria-hidden="true"></span> Jednotná štruktúra dát</h2>
+            <p>Všetky parsery vracajú pole objektov v&nbsp;rovnakom tvare, takže sa zobrazujú rovnako bez ohľadu na zdroj:</p>
+            <pre class="code-block"><code>{
+  restaurantId: "fiitfood",
+  dayIndex: 3,               // 1 = pondelok … 5 = piatok
+  dayName: "Streda",
+  date: "2026-10-14",        // null, ak stránka dátum neuvádza
+  type: "hlavne",            // polievka | hlavne | vegetarianske | dezert | salat | ine
+  label: "Menu 2",
+  name: "Kuracie vykostené stehno na šampiňónoch, ryža",
+  price: 6,                  // null, ak cena nie je uvedená
+  priceStudent: null,
+  weight: "120 g, 150 g",
+  allergens: [1, 3, 10],
+  vegetarian: false
+}</code></pre>
+        </section>
+
+        <section class="content-card" id="ukladanie" aria-labelledby="ukladanieNadpis">
+            <h2 id="ukladanieNadpis"><span class="bi bi-database" aria-hidden="true"></span> Ukladanie a&nbsp;aktualizácia</h2>
+            <ul>
+                <li>Spracované dáta sa ukladajú do <code>localStorage</code> zvlášť pre živé stránky a&nbsp;lokálne kópie.</li>
+                <li>Ak sú uložené dáta z&nbsp;dnešného dňa, stránky reštaurácií sa pri otvorení znova nenačítavajú.</li>
+                <li>Tlačidlo <em>Aktualizovať menu</em> spustí nové načítanie, tlačidlo <em>Vymazať uložené dáta</em> uložené menu odstráni.</li>
+                <li>Pri každej reštaurácii je zobrazený dátum a&nbsp;čas poslednej aktualizácie, počas načítavania sa zobrazuje indikátor načítania.</li>
+            </ul>
+        </section>
+
+        <section class="content-card" id="kniznice" aria-labelledby="kniznicNadpis">
+            <h2 id="kniznicNadpis"><span class="bi bi-boxes" aria-hidden="true"></span> Použité knižnice</h2>
+            <div class="table-responsive">
+                <table class="table lib-table align-middle">
+                    <thead>
+                    <tr><th scope="col">Knižnica</th><th scope="col">Typ</th><th scope="col">Použitie</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><a href="https://getbootstrap.com/">Bootstrap 5.3.3</a></td><td>CSS + JS</td><td>mriežka, tlačidlá, navigácia (collapse), toast hlásenia</td></tr>
+                    <tr><td><a href="https://icons.getbootstrap.com/">Bootstrap Icons 1.11.3</a></td><td>ikonová sada</td><td>ikony v&nbsp;rozhraní</td></tr>
+                    <tr><td><a href="https://jquery.com/">jQuery 3.7.1</a></td><td>JS</td><td>práca s&nbsp;DOM, udalosti, vytváranie prvkov</td></tr>
+                    <tr><td><a href="https://github.com/itfoundry/Poppins">Poppins</a></td><td>písmo (.woff2)</td><td>lokálne cez <code>@font-face</code>, licencia SIL OFL 1.1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="small mb-0">Nepoužívajú sa JavaScriptové frameworky (React, Vue, Angular…) ani knižnice na scrapovanie.</p>
+        </section>
+
+        <section class="content-card" id="alergeny" aria-labelledby="alergenyNadpis">
+            <h2 id="alergenyNadpis"><span class="bi bi-exclamation-diamond" aria-hidden="true"></span> Zoznam alergénov</h2>
+            <ol class="allergen-list">
+                <li>Obilniny obsahujúce lepok</li>
+                <li>Kôrovce</li>
+                <li>Vajcia</li>
+                <li>Ryby</li>
+                <li>Arašidy</li>
+                <li>Sójové zrná</li>
+                <li>Mlieko</li>
+                <li>Orechy</li>
+                <li>Zeler</li>
+                <li>Horčica</li>
+                <li>Sezamové semená</li>
+                <li>Oxid siričitý a&nbsp;siričitany</li>
+                <li>Vlčí bôb</li>
+                <li>Mäkkýše</li>
+            </ol>
+        </section>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <div>
+            <p class="footer-title">Obedové menu v&nbsp;okolí fakulty</p>
+            <p>Zadanie č.&nbsp;2, WEBTE1, ZS&nbsp;2026/2027 &middot; Viktor Andreychyk</p>
+            <p class="small">Údaje sú prevzaté zo stránok reštaurácií, za ich správnosť zodpovedajú prevádzkovatelia.</p>
+        </div>
+        <div>
+            <p class="footer-title">Použité knižnice</p>
+            <ul class="footer-list">
+                <li><a href="https://getbootstrap.com/">Bootstrap 5.3.3</a> (CSS + JS)</li>
+                <li><a href="https://icons.getbootstrap.com/">Bootstrap Icons 1.11.3</a></li>
+                <li><a href="https://jquery.com/">jQuery 3.7.1</a></li>
+                <li>Písmo <a href="https://github.com/itfoundry/Poppins">Poppins</a> (SIL OFL 1.1)</li>
+            </ul>
+        </div>
+        <div>
+            <p class="footer-title">Navigácia</p>
+            <ul class="footer-list">
+                <li><a href="index.html">Denné menu</a></li>
+                <li><a href="o-projekte.html">O projekte</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+</html>

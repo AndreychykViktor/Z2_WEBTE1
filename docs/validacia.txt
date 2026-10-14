@@ -1,0 +1,29 @@
+Výpis z validátorov W3C – 14. 10. 2026
+=====================================
+
+HTML – https://validator.w3.org/nu/ (Nu Html Checker, vnu 26.10.12, priamy vstup textu)
+--------------------------------------------------------------------------------------
+index.html:       The document validates according to the specified schema(s).
+o-projekte.html:  The document validates according to the specified schema(s).
+(Screenshot pre index.html: html-validator-index.jpg – „Document checking completed. No errors or warnings to show.“)
+
+CSS – https://jigsaw.w3.org/css-validator/ (profil CSS level 3 + SVG, priamy vstup textu)
+-----------------------------------------------------------------------------------------
+css/style.css:
+  Congratulations! No Error Found.
+  This document validates as CSS level 3 + SVG !
+  Warnings (5)
+    Line : 180 - Due to their dynamic nature, CSS variables are currently not statically checked
+    Line : 246 - .day-tab.active - Same color for "background-color" and "border-color"
+    Line : 450 - Due to their dynamic nature, CSS variables are currently not statically checked
+    Line : 808 - Due to their dynamic nature, CSS variables are currently not statically checked
+    Line : 835 - Due to their dynamic nature, CSS variables are currently not statically checked
+  (Screenshot: css-validator-style.jpg)
+
+css/fonts.css:
+  Congratulations! No Error Found.
+  This document validates as CSS level 3 + SVG !
+
+Poznámka: Varovania nie sú chyby – ide o CSS premenné (validátor ich nekontroluje staticky)
+a o zámerne rovnakú farbu pozadia a okraja aktívnej záložky.
+Súbory knižníc (vendor/) sa nevalidujú, keďže nie sú vlastným kódom.
