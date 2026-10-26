@@ -287,8 +287,18 @@ $(function () {
             $el.append(document.createTextNode(' Zatiaľ neaktualizované'));
             return;
         }
+        // Posledná úspešná aktualizácia = čas, z ktorého pochádzajú zobrazené dáta.
         $el.append(document.createTextNode(' Posledná aktualizácia: '));
-        $el.append($('<time>', { datetime: entry.updatedAt, text: U.formatDateTime(entry.updatedAt) }));
+        if (entry.lastSuccessAt) {
+            $el.append($('<time>', { datetime: entry.lastSuccessAt, text: U.formatDateTime(entry.lastSuccessAt) }));
+        } else {
+            $el.append(document.createTextNode('zatiaľ neúspešná'));
+        }
+        // Pri chybe zobrazíme aj čas neúspešného pokusu.
+        if (entry.status === 'error') {
+            $el.append(document.createTextNode(' · neúspešný pokus: '));
+            $el.append($('<time>', { datetime: entry.updatedAt, text: U.formatDateTime(entry.updatedAt) }));
+        }
         const sourceText = state.source === 'live' ? 'živá stránka' : 'lokálna kópia';
         $el.append($('<span>', { class: `rc-source rc-source-${state.source}`, text: sourceText }));
     }

@@ -50,9 +50,12 @@ const MenuStorage = (function (config) {
         return write(config.storageKey, all);
     }
 
-    /** Je záznam z dnešného dňa? (vtedy sa stránka reštaurácie znova nenačítava) */
+    /**
+     * Sú uložené úspešne načítané dáta z dnešného dňa? (vtedy sa stránka reštaurácie znova nenačítava)
+     * Neúspešný pokus sa za dnešné dáta nepovažuje – pri ďalšom otvorení sa načítanie zopakuje.
+     */
     function isFromToday(entry, todayIso) {
-        return Boolean(entry && entry.fetchedOn === todayIso);
+        return Boolean(entry && entry.status === 'ok' && entry.fetchedOn === todayIso);
     }
 
     function clearData() {
