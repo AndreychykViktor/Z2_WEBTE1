@@ -104,13 +104,13 @@ const MenuUtils = (function () {
     }
 
     /**
-     * Vyberie alergény z konca názvu jedla – formáty „(1,3,7)“ alebo „A:1,3,7“.
+     * Vyberie alergény z konca názvu jedla – formáty „(1,3,7)“, „/1,3,7/“ alebo „A:1,3,7“.
      * Vráti { text: názov bez alergénov, allergens: [...] }.
      */
     function extractAllergens(text) {
         let rest = clean(text);
         let allergens = [];
-        const patterns = [/\s*A:\s*([\d,\s]*)$/i, /\s*\(([\d,\s]+)\)\s*$/];
+        const patterns = [/\s*A:\s*([\d,\s]*)$/i, /\s*\(([\d,\s]+)\)\s*$/, /\s*\/([\d,\s]+)\/\s*$/];
         for (const pattern of patterns) {
             const m = rest.match(pattern);
             if (m) {
@@ -137,7 +137,7 @@ const MenuUtils = (function () {
             .replace(/\s+,/g, ',')
             .replace(/,(\S)/g, ', $1')
             .replace(/(,\s*)+/g, ', ')
-            .replace(/^[,\s]+|[,\s]+$/g, '');
+            .replace(/^[,.\/\s]+|[,\s]+$/g, '');
         return { text: clean(cleaned), weight: found.length ? found.join(', ') : null };
     }
 

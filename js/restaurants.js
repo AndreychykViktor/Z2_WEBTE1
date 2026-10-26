@@ -77,57 +77,77 @@ const RESTAURANTS = (function (U) {
     }
 
     /* ---------------------------------------------------------------
-     * Delikanti (Jedáleň PriF UK) – tabuľka, deň je v <th rowspan>,
-     * číslo menu v <strong>, názov v ďalšej bunke, cena v poslednej.
+     * Reštaurácia DRAG – každý deň je div.tab-pane s id podľa dňa (#pondelok … #piatok).
+     * Polievka je voľný text medzi nadpismi „POLIEVKA“ a „HLAVNÉ JEDLO“,
+     * hlavné jedlá sú v tabuľke: prvá bunka názov, bunka td.text-right cena.
      * --------------------------------------------------------------- */
-    function parseDelikanti(doc, restaurantId) {
-        const table = doc.querySelector('table.prif-denne-table') || doc.querySelector('table.menu-table');
-        if (!table) {
-            throw new U.StructureError('Na stránke sa nenašla tabuľka denného menu (table.menu-table).');
+    const DRAG_DAYS = ['pondelok', 'utorok', 'streda', 'stvrtok', 'piatok'];
+
+    function parseDrag(doc, restaurantId) {
+        const panes = DRAG_DAYS.map((id) => doc.getElementById(id)).filter(Boolean);
+        if (panes.length === 0) {
+            throw new U.StructureError('Na stránke sa nenašli záložky dní (div.tab-pane#pondelok …).');
         }
 
         const items = [];
-        let dayIndex = null;
-        let date = null;
-
-        table.querySelectorAll('tr').forEach((row) => {
-            const th = row.querySelector('th');
-            if (th) {
-                dayIndex = U.dayIndexFromName(th.querySelector('strong')?.textContent || th.textContent);
-                date = U.parseSkDate(th.textContent);
-            }
+        panes.forEach((pane) => {
+            const dayIndex = U.dayIndexFromName(pane.querySelector('h2')?.textContent || pane.id);
             if (!dayIndex) {
                 return;
             }
 
-            const cells = row.querySelectorAll('td');
-            // Riadok „Na tento deň nie je denné menu“ má jedinú bunku s colspan.
-            if (cells.length < 2 || cells[0].hasAttribute('colspan')) {
-                return;
+            const soup = dragSoupText(pane);
+            if (soup) {
+                const { text: withoutAllergens, allergens } = U.extractAllergens(soup);
+                const { text: name, weight } = U.extractWeight(withoutAllergens);
+                if (name) {
+                    items.push(U.createItem({
+                        restaurantId, dayIndex, date: null,
+                        type: 'polievka', label: 'Polievka',
+                        name, weight, price: null, allergens
+                    }));
+                }
             }
 
-            const number = U.clean(cells[0].textContent);
-            const rawName = U.clean(cells[1].textContent);
-            if (!rawName) {
-                return;
-            }
-            const { text: withoutAllergens, allergens } = U.extractAllergens(rawName);
-            const { text: name, weight } = U.extractWeight(withoutAllergens);
-            const isSoup = number === '';
-
-            items.push(U.createItem({
-                restaurantId,
-                dayIndex,
-                date,
-                type: isSoup ? 'polievka' : 'hlavne',
-                label: isSoup ? 'Polievka' : `Menu ${number}`,
-                name,
-                weight,
-                price: cells[2] ? U.parsePrice(cells[2].textContent) : null,
-                allergens
-            }));
+            pane.querySelectorAll('table tr').forEach((row, index) => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length < 2) {
+                    return;
+                }
+                const text = U.clean(cells[0].textContent);
+                if (!text) {
+                    return;
+                }
+                const { text: withoutAllergens, allergens } = U.extractAllergens(text);
+                const { text: name, weight } = U.extractWeight(withoutAllergens);
+                items.push(U.createItem({
+                    restaurantId, dayIndex, date: null,
+                    type: 'hlavne', label: `Menu ${index + 1}`,
+                    name, weight,
+                    price: U.parsePrice(row.querySelector('td.text-right')?.textContent || ''),
+                    allergens
+                }));
+            });
         });
         return items;
+    }
+
+    /** Text polievky = uzly medzi blokom s nadpisom „POLIEVKA“ a blokom „HLAVNÉ JEDLO“. */
+    function dragSoupText(pane) {
+        const titles = Array.from(pane.querySelectorAll('.menu_box_title'));
+        const soupTitle = titles.find((el) => U.normalize(el.textContent).includes('polievka'));
+        if (!soupTitle) {
+            return '';
+        }
+        let text = '';
+        for (let node = soupTitle.nextSibling; node; node = node.nextSibling) {
+            if (node.nodeType === Node.ELEMENT_NODE &&
+                (node.classList.contains('menu_box_title') || node.tagName === 'TABLE')) {
+                break;
+            }
+            text += ` ${node.textContent}`;
+        }
+        return U.clean(text);
     }
 
     /* ---------------------------------------------------------------
@@ -209,14 +229,14 @@ const RESTAURANTS = (function (U) {
             parse: parseEatAndMeet
         },
         {
-            id: 'delikanti',
-            name: 'Delikanti – Jedáleň PriF UK',
-            subtitle: 'Jedáleň Prírodovedeckej fakulty UK',
-            url: 'https://www.delikanti.sk/prevadzky/3-jedalen-prif-uk/',
-            localCopy: 'local/delikanti.html',
-            address: 'Ilkovičova 6, pavilón CH1, Mlynská dolina, Bratislava',
-            priceNote: 'Stránka neuvádza ceny jednotlivých jedál.',
-            parse: parseDelikanti
+            id: 'drag',
+            name: 'Reštaurácia DRAG',
+            subtitle: 'Reštaurácia pri internátoch Mlyny',
+            url: 'https://www.restauracia-drag.sk/denne-menu',
+            localCopy: 'local/drag.html',
+            address: 'Staré Grunty 64, Bratislava',
+            priceNote: 'Cena menu je vrátane polievky.',
+            parse: parseDrag
         },
         {
             id: 'fiitfood',

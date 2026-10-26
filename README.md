@@ -32,10 +32,10 @@ a predvolene sa používajú lokálne kópie. Prepínač „Zdroj dát“ prepí
 | Reštaurácia | Stránka | Štruktúra |
 |---|---|---|
 | Eat & Meet (ŠD Átriaky) | https://www.eatandmeet.sk/tyzdenne-menu | Bootstrap záložky `div#day-1 … #day-7`, bloky `.menu-body` |
-| Delikanti – Jedáleň PriF UK | https://www.delikanti.sk/prevadzky/3-jedalen-prif-uk/ | tabuľka `table.prif-denne-table`, deň v `th[rowspan]` |
+| Reštaurácia DRAG (Staré Grunty 64) | https://www.restauracia-drag.sk/denne-menu | záložky `div.tab-pane#pondelok … #piatok`, polievka za nadpisom `.menu_box_title`, jedlá v tabuľke, cena v `td.text-right` |
 | FiitFood (FIIT STU) | http://www.freefood.sk/menu/ (sekcia `#fiit-food`) | zoznamy `ul.daily-offer > li`, `ul.day-offer > li` |
 
-Lokálne kópie sú v priečinku `local/` (uložené 14. 10. 2026). Sú zjednodušené – bez skriptov,
+Lokálne kópie sú v priečinku `local/` (Eat & Meet a FiitFood uložené 14. 10. 2026, DRAG 26. 10. 2026). Sú zjednodušené – bez skriptov,
 štýlov a obrázkov – ale so zachovanou štruktúrou menu (značky, triedy, id), takže ich spracúva
 ten istý parser ako živé stránky.
 
@@ -83,7 +83,3 @@ Licencia: **SIL Open Font License, Version 1.1** – plné znenie je v súbore `
 HTML bolo overené na https://validator.w3.org/ a CSS na https://jigsaw.w3.org/css-validator/ –
 bez chýb. Výpisy a screenshoty sú v priečinku `docs/`.
 
-## Použitie AI nástrojov
-
-Pri vypracovaní zadania bol použitý AI – pomoc s návrhom
-štruktúry kódu, parsermi, štýlmi a textami.
